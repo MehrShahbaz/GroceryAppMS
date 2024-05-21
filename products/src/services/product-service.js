@@ -70,6 +70,32 @@ class ProductService {
       throw new APIError("Data Not found");
     }
   }
+
+  async GetProductPayload(userId, { productId, qty }, event) {
+    const product = await this.GetProductById(productId);
+
+    if (product) {
+      const payload = {
+        event,
+        data: { userId, product, qty },
+      };
+
+      return FormateData(payload);
+    } else {
+      return FormateData({ error: "No Products availible " });
+    }
+  }
+
+  async SubscribeEvents(payload) {
+    const { event, data } = payload;
+
+    switch (event) {
+      case "TESTING":
+        console.log("++++++++++++++++ Testing ++++++++++++++++");
+      default:
+        break;
+    }
+  }
 }
 
 module.exports = ProductService;
